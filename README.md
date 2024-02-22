@@ -15,4 +15,5 @@ This project offers companies deep customer insights and competitive advantages 
 Here are the links to the Kaggle dataset:
 
 Amazon review: https://www.kaggle.com/datasets/bittlingmayer/amazonreviews
+
 Reddit sarcasm: https://www.kaggle.com/datasets/danofer/sarcasm
