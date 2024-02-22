@@ -13,5 +13,6 @@ interface simplifies the interpretation and utilization of this data for busines
 This project offers companies deep customer insights and competitive advantages and is a valuable tool for market research and academic exploration in data science, NLP, and e-commerce. Its alignment with consumer-centric approaches, promotion of data-driven decision-making, and technological innovation in web scraping, NLP, and data visualization make it a highly relevant and scalable solution across various e-commerce platforms and industries, thus standing out for its practical application in enhancing customer experience and driving business strategies.
 
 Here are the links to the Kaggle dataset:
+
 Amazon review: https://www.kaggle.com/datasets/bittlingmayer/amazonreviews
 Reddit sarcasm: https://www.kaggle.com/datasets/danofer/sarcasm
