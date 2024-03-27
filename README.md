@@ -17,3 +17,10 @@ Here are the links to the Kaggle dataset:
 Amazon review: https://www.kaggle.com/datasets/kritanjalijain/amazon-reviews/data
 
 Reddit sarcasm: https://www.kaggle.com/datasets/danofer/sarcasm
+
+Todo:
+1. Average the reviews for both sentiment & summarization, improving from just one or first review.
+2. Take the sentiment analysis result into the input parameter for summarization model.
+3. Give user option to switch between different models.
+4. Storing summarized data for multiple client requests.
+5. Hashmap for storing product id & its corresponding sentiment+summary, store it for a period of time, the do an update. (interactive feature, where user enters a price point for a product, then we use something like pagerank to give some of the best results i.e. product) 
