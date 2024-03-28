@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
 from openai import OpenAI
 
-def generate_summary(text):
+load_dotenv()
+
+def generate_summary_gpt(text):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = client.chat.completions.create(
@@ -13,3 +16,9 @@ def generate_summary(text):
     )
 
     return completion.choices[0].message.content
+
+def generate_summary_gemini(text):
+    return "REVIEW FROM GOOGLE'S GEMINI"
+
+def generate_summary_custom(text):
+    return "REVIEW FROM CUSTOM MODEL"

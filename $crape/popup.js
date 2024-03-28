@@ -1,76 +1,75 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var analyzeButton = document.getElementById('analyzeButton');
+    const analyzeButton = document.getElementById('analyzeButton');
+    const classifierDropdown = document.getElementById('classifierDropdown');
+    const modelDropdown = document.getElementById('modelDropdown');
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var tab = tabs[0];
-        var url = new URL(tab.url);
-        var domain = url.hostname;
-        if (domain === "www.amazon.com") {
-            var pathSegments = url.pathname.split('/');
-            var productIdIndex = pathSegments.indexOf('dp') + 1;
-            var productId = pathSegments[productIdIndex];
-            
-            chrome.storage.local.get([productId], function(data) {
-                if(data[productId]) {
-                    var storedData = data[productId];
-                    if(storedData.sentiment && storedData.summary) {
-                        document.getElementById('summaryResult').textContent = storedData.summary;
+    function updateUI(data) {
+        document.getElementById('summaryResult').textContent = data.summary;
+        
+        let sentimentValue = parseFloat(data.sentiment);
+        const degrees = 90 * sentimentValue + 90;
+        const gaugeElement = document.querySelector('.gauge');
+        const valueElement = gaugeElement.querySelector('.value');
+        gaugeElement.style.setProperty('--rotation', `${degrees}deg`);
+        valueElement.textContent = `${Math.round(sentimentValue * 100)}%`;
+    }
 
-                        const degrees = 90 * storedData.sentiment + 90; 
-                        const gaugeElement = document.querySelector('.gauge');
-                        const valueElement = gaugeElement.querySelector('.value');
-                        gaugeElement.style.setProperty('--rotation', `${degrees}deg`);
-                        valueElement.textContent = `${Math.round(storedData.sentiment * 100)}%`;
-                    }
-                }
-            });
-        }
-    });
+    function fetchAndDisplayProductInfo(productId, classifier, model) {
+        fetch('http://127.0.0.1:5000/analyze', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                productId: productId,
+                classifier: classifier,
+                model: model
+            }),
+        })                    
+        .then(response => response.json())
+        .then(data => {
+            updateUI(data);
 
-    analyzeButton.addEventListener('click', function() {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            var tab = tabs[0];
-            var url = new URL(tab.url);
-            var domain = url.hostname;
-            if(domain === "www.amazon.com") {
-                var pathSegments = url.pathname.split('/');
-                var productIdIndex = pathSegments.indexOf('dp') + 1;
-                var productId = pathSegments[productIdIndex];
-                if(productId) {
-                    fetch('http://127.0.0.1:5000/analyze', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ productId: productId }),
-                    })                    
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('summaryResult').textContent = data.summary;
+            const storageObject = {};
+            storageObject[productId] = {
+                sentiment: data.sentiment,
+                summary: data.summary,
+                classifier: classifier,
+                model: model
+            };
+            chrome.storage.local.set(storageObject);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 
-                        let sentimentValue = parseFloat(data.sentiment);
-                        if (sentimentValue > 0) {
-                            sentimentValue = Math.min(sentimentValue*10, 1);
-                        } else if (sentimentValue < 0) {
-                            sentimentValue = Math.max(sentimentValue*10, -1);
-                        }
-                        
-                        const degrees = 90 * sentimentValue + 90;
-                        const gaugeElement = document.querySelector('.gauge');
-                        const valueElement = gaugeElement.querySelector('.value');
-                        gaugeElement.style.setProperty('--rotation', `${degrees}deg`);
-                        valueElement.textContent = `${Math.round(sentimentValue * 100)}%`;
-                        gaugeElement.style.setProperty('--background-position', `${degrees*(5/11)}%`);
-
-                        var storageObject = {};
-                        storageObject[productId] = { 'sentiment': sentimentValue, 'summary': data.summary };
-                        chrome.storage.local.set(storageObject);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                }
-            } else {
-                alert('This extension is only available for Amazon product pages.');
+    function attemptRestore(productId) {
+        chrome.storage.local.get([productId], function(data) {
+            if(data[productId]) {
+                const storedData = data[productId];
+                updateUI(storedData);
+                classifierDropdown.value = storedData.classifier || 'defaultClassifier'; // Placeholder if not set
+                modelDropdown.value = storedData.model || 'defaultModel'; // Placeholder if not set
             }
         });
-    }, false);
-}, false);
+    }
+
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        const tab = tabs[0];
+        const url = new URL(tab.url);
+        const domain = url.hostname;
+        if (domain === "www.amazon.com") {
+            const pathSegments = url.pathname.split('/');
+            const productIdIndex = pathSegments.indexOf('dp') + 1;
+            const productId = pathSegments[productIdIndex];
+            attemptRestore(productId);
+
+            analyzeButton.addEventListener('click', function() {
+                const classifier = classifierDropdown.value;
+                const model = modelDropdown.value;
+                fetchAndDisplayProductInfo(productId, classifier, model);
+            });
+        } else {
+            alert('This extension is only available for Amazon product pages.');
+        }
+    });
+});
