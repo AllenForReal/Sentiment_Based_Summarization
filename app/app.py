@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 
 def analyzeProduct(product_id, classifier, model):
-    reviews = scrape_amazon_product(product_id)
+    reviews, product_details = scrape_amazon_product(product_id)
     if reviews:
         average_sentiment = calculateSentiment(reviews, classifier)
         summary = calculateSummary(reviews, model)
