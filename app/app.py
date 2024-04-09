@@ -14,6 +14,7 @@ CORS(app)
 
 nltk.download('vader_lexicon')
 nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 class Analyze(Resource):
     def post(self):
