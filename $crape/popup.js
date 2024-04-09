@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function fetchAndDisplayProductInfo(productId, classifier, model) {
-        fetch('http://127.0.0.1:5000/analyze', {
+        fetch('https://sentiment-based-summarization.onrender.com/analyze', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
