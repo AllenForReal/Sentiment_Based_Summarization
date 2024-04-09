@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "$CRAPE",
+    "name": "SCRAPE",
     "version": "1.0",
     "description": "Analyze Amazon Product Reviews",
     "permissions": ["activeTab", "tabs", "storage"],
