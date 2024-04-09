@@ -3,7 +3,7 @@ from flask_cors import CORS
 from scrape import scrape_amazon_product
 from sentiment import analyze_sentiment_nltk, analyze_sentiment_lstm, analyze_sentiment_textblob
 from summary import generate_summary_gpt, generate_summary_gemini, generate_summary_custom
-import random
+import random   
 
 app = Flask(__name__)
 

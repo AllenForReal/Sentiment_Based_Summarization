@@ -2,7 +2,6 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 import google.generativeai as genai
-import runpod
 import requests
 
 load_dotenv()
@@ -52,7 +51,7 @@ def generate_summary_gemini(reviews, product_details):
     
     product_data = model.generate_content(f"{name} - {full_description} - {feature_bullets}")
 
-    return review_data.text, product_data
+    return review_data.text, product_data.text
 
 def generate_summary_custom(reviews, product_details):
     description_endpoint = "https://api.runpod.ai/v2/l8p1v5w0gct9w8/runsync"
