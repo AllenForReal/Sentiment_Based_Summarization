@@ -1,64 +1,70 @@
 from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
+from flasgger import Swagger
 from flask_cors import CORS
-from scrape import scrape_amazon_product
-from sentiment import analyze_sentiment_nltk, analyze_sentiment_lstm, analyze_sentiment_textblob
-from summary import generate_summary_gpt, generate_summary_gemini, generate_summary_custom
-import random   
+from app.util import analyzeProduct
 
 app = Flask(__name__)
+api = Api(app)
+swagger = Swagger(app)
 
 CORS(app)
 
-def analyzeProduct(product_id, classifier, model):
-    reviews, product_details = scrape_amazon_product(product_id)
-    if reviews:
-        average_sentiment = calculateSentiment(reviews, classifier)
-        summary, description = calculateSummary(reviews, product_details, model)
+class Analyze(Resource):
+    def post(self):
+        """
+        This method responds to the POST request for this endpoint and returns the analysis of the Amazon Product.
+        ---
+        tags:
+        - Product Analysis
+        parameters:
+            - name: productId
+              in: query
+              type: string
+              required: true
+              description: The ASIN to be analyzed
+            - name: classifier
+              in: query
+              type: string
+              required: true
+              description: The classifier to be used for sentiment analysis
+            - name: model
+              in: query
+              type: string
+              required: true
+              description: The model to be used for summary generation
+        responses:
+            200:
+                description: A successful POST request
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                sentiment:
+                                    type: string
+                                    description: The sentiment of the product
+                                summary:
+                                    type: string
+                                    description: The summary of the product
+                                description:
+                                    type: string
+                                    description: The description of the product
+        """
+        data = request.get_json()
         
-        return average_sentiment, summary, description
+        product_id = data.get('productId')
+        classifier = data.get('classifier')
+        model = data.get('model')
+        sentiment, summary, description = analyzeProduct(product_id, classifier, model)
+        response = {
+            'sentiment': sentiment,
+            'summary': summary,
+            'description': description
+        }
+        return jsonify(response)
     
-    return None, None, None
-
-def calculateSentiment(reviews, classifier):
-    sentiment_scores = []
-    for review in reviews:
-        if classifier == 'nltk':
-            sentiment_scores.append(analyze_sentiment_nltk(review['description']))
-        elif classifier == 'textblob':
-            sentiment_scores.append(analyze_sentiment_textblob(review['description']))
-        elif classifier == 'lstm':
-            sentiment_scores.append(analyze_sentiment_lstm(review['description']))
-
-    average_sentiment = sum(sentiment_scores) / len(sentiment_scores)
-
-    return average_sentiment
-
-def calculateSummary(reviews, product_details, model):
-    if len(reviews) < 10:
-        selected_reviews = reviews
-    else:
-        selected_reviews = random.sample(reviews, 10)
-    
-    if model == 'gpt':
-        return generate_summary_gpt(selected_reviews, product_details)
-    elif model == 'gemini':
-        return generate_summary_gemini(selected_reviews, product_details)
-    elif model == 'custom':
-        return generate_summary_custom(selected_reviews, product_details)
-
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    data = request.get_json()
-    product_id = data.get('productId')
-    classifier = data.get('classifier')
-    model = data.get('model')
-    sentiment, summary, description = analyzeProduct(product_id, classifier, model)
-    response = {
-        'sentiment': sentiment,
-        'summary': summary,
-        'description': description
-    }
-    return jsonify(response)
+api.add_resource(Analyze, "/analyze")
 
 if __name__ == '__main__':
     app.run(debug=True)
