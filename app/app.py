@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from flasgger import Swagger
 from flask_cors import CORS
-from app.util import analyzeProduct
+from util import analyzeProduct
 
 app = Flask(__name__)
 api = Api(app)
