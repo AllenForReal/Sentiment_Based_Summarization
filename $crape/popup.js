@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUI(data) {
         document.getElementById('summaryResult').textContent = data.summary;
+        document.getElementById('descriptionResult').textContent = data.description;
         
         let sentimentValue = parseFloat(data.sentiment);
         const degrees = 90 * sentimentValue + 90;
@@ -32,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             storageObject[productId] = {
                 sentiment: data.sentiment,
                 summary: data.summary,
+                description: data.description,
                 classifier: classifier,
                 model: model
             };
@@ -47,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if(data[productId]) {
                 const storedData = data[productId];
                 updateUI(storedData);
-                classifierDropdown.value = storedData.classifier || 'defaultClassifier'; // Placeholder if not set
-                modelDropdown.value = storedData.model || 'defaultModel'; // Placeholder if not set
+                classifierDropdown.value = storedData.classifier || 'defaultClassifier';
+                modelDropdown.value = storedData.model || 'defaultModel';
             }
         });
     }
-
+    
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         const tab = tabs[0];
         const url = new URL(tab.url);
