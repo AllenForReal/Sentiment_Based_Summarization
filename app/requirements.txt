@@ -8,3 +8,4 @@ google-generativeai
 protobuf
 python-dotenv
 Requests
+gunicorn
