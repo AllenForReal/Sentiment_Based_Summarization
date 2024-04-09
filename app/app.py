@@ -3,12 +3,17 @@ from flask_restful import Resource, Api
 from flasgger import Swagger
 from flask_cors import CORS
 from util import analyzeProduct
+import nltk
+import nltk.sentiment
 
 app = Flask(__name__)
 api = Api(app)
 swagger = Swagger(app)
 
 CORS(app)
+
+nltk.download('vader_lexicon')
+nltk.download('punkt')
 
 class Analyze(Resource):
     def post(self):
