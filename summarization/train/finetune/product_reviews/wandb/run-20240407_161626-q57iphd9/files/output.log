@@ -1,0 +1,1 @@
+c:\Users\Engineer_AI6\miniconda3\envs\test_infra\lib\site-packages\transformers\models\bart\modeling_bart.py:590: UserWarning: 1Torch was not compiled with flash attention. (Triggered internally at ..\aten\src\ATen\native\transformers\cuda\sdp_utils.cpp:263.)

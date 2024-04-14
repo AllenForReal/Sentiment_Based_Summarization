@@ -1,0 +1,14 @@
+.DS_Store
+summarization/test/product_descriptions/.env
+summarization/data/raw_compressed/
+summarization/data/labelled/
+summarization/test/product_descriptions/test_scores.csv
+summarization/train/benchmark/product_descriptions/benchmark_scores.csv
+# training checkpoints
+summarization/train/finetune/product_descriptions/bart_product_info1
+summarization/train/finetune/product_descriptions/bart_tokenized
+summarization/train/finetune/product_descriptions/bart-product-info-summarization
+summarization/train/finetune/product_reviews/bart_product_reviews
+summarization/train/finetune/product_reviews/bart_tokenized
+summarization/train/finetune/product_reviews/bart-reviews-summarization
+
