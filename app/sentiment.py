@@ -1,5 +1,7 @@
 import nltk
 import nltk.sentiment
+import BERT
+import LSTM
 
 def analyze_sentiment_nltk(text):
     words = nltk.word_tokenize(text)
@@ -15,8 +17,8 @@ def analyze_sentiment_nltk(text):
     
     return average_sentiment
 
-def analyze_sentiment_textblob(text):
-    return 0.75
+def analyze_sentiment_bert(text):
+    return BERT.predict_sentiment(text)
 
 def analyze_sentiment_lstm(text):
-    return 0.5
+    return LSTM.predict_sentiment(text)

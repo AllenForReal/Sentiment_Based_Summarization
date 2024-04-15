@@ -1,5 +1,5 @@
 from scrape import scrape_amazon_product
-from sentiment import analyze_sentiment_nltk, analyze_sentiment_lstm, analyze_sentiment_textblob
+from sentiment import analyze_sentiment_nltk, analyze_sentiment_lstm, analyze_sentiment_bert
 from summary import generate_summary_gpt, generate_summary_gemini, generate_summary_custom
 import random
 
@@ -18,11 +18,12 @@ def calculateSentiment(reviews, classifier):
     for review in reviews:
         if classifier == 'nltk':
             sentiment_scores.append(analyze_sentiment_nltk(review['description']))
-        elif classifier == 'textblob':
-            sentiment_scores.append(analyze_sentiment_textblob(review['description']))
+        elif classifier == 'bert':
+            sentiment_scores.append(analyze_sentiment_bert(review['description']))
         elif classifier == 'lstm':
             sentiment_scores.append(analyze_sentiment_lstm(review['description']))
-
+        
+    print(sentiment_scores)
     average_sentiment = sum(sentiment_scores) / len(sentiment_scores)
 
     return average_sentiment
