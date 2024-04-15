@@ -9,3 +9,9 @@ protobuf
 python-dotenv
 Requests
 gunicorn
+gdown
+numpy
+tensorflow
+tensorflow_intel
+torch
+transformers
