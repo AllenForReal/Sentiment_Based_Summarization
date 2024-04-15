@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader, Dataset
 import gdown
 import os
 
-file_path = 'app/bert_epoch_3.pth'
+file_path = r'app\bert_epoch_3.pth'
 
 if not os.path.exists(file_path):
     fileid = '1bg_Ez1kf2rsdoPk78ut-e0Vl132ums6O'
