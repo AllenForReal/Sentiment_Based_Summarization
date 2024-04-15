@@ -23,7 +23,6 @@ def calculateSentiment(reviews, classifier):
         elif classifier == 'lstm':
             sentiment_scores.append(analyze_sentiment_lstm(review['description']))
         
-    print(sentiment_scores)
     average_sentiment = sum(sentiment_scores) / len(sentiment_scores)
 
     return average_sentiment

@@ -40,4 +40,4 @@ def predict_sentiment(text):
         outputs = model(input_ids, attention_mask=attention_mask)
         prediction = torch.argmax(outputs.logits, dim=1).item()
 
-    return "1" if prediction == 1 else "0"
+    return 1 if prediction == 1 else 0
