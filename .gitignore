@@ -14,3 +14,4 @@ summarization/train/finetune/product_reviews/bart-reviews-summarization
 
 summarization/train/benchmark/product_descriptions/tfidf_descriptions_scores.csv
 summarization/train/benchmark/product_reviews/tfidf_reviews_scores.csv
+summarization/test/product_reviews/bart_large_reviews_scores.csv
