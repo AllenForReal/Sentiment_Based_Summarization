@@ -73,4 +73,4 @@ class Analyze(Resource):
 api.add_resource(Analyze, "/analyze")
 
 if __name__ == '__main__':
-    app.run(use_reloader=True)
+    app.run(debug=True, use_reloader=False)
