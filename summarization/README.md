@@ -99,7 +99,15 @@ Please find the scores and code used for the benchmark in `train/benchmark/*` fo
 
 ### 4. Finetuning to improve the performance
 
-TBD
+refer `train/finetune/*` for details
+
+### 5. Package/Dockerize the finetuned model for deployment
+
+refer `deploy/*` for details regarding inference and docker images.
+
+### 6. Deploy/Test the deployed service
+
+refer `test/product_descriptions/deployed_inference.ipynb` for details regarding the deployed API usage
 
 
 
